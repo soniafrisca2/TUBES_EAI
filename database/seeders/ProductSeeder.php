@@ -10,11 +10,19 @@ class ProductSeeder extends Seeder
     public function run()
     {
         $products = [
-            ['name' => 'Ban', 'price' => 75000],
-            ['name' => 'Seal karet', 'price' => 50000],
-            // Add more product data as needed
+            ['nama_barang' => 'Ban', 'harga_barang' => 75000,  'harga_ongkir' => null, 'harga_total' => 0],
+            ['nama_barang' => 'Seal karet', 'harga_barang' => 50000,  'harga_ongkir' => null, 'harga_total' => 0],
+            // Tambahkan data produk lainnya jika diperlukan
         ];
 
-        Product::insert($products);
+        foreach ($products as $productData) {
+            $harga_barang = $productData['harga_barang'];
+            $harga_ongkir = $productData['harga_ongkir'];
+            $harga_total = $harga_barang + $harga_ongkir;
+
+            $productData['harga_total'] = $harga_total;
+
+            Product::create($productData);
+        }
     }
 }

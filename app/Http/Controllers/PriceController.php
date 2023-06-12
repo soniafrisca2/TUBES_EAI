@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Helpers\ApiFormatter;
+use Illuminate\Http\Request;
 
 class PriceController extends Controller
 {
@@ -13,23 +12,23 @@ class PriceController extends Controller
         $product = Product::find($id_produk);
 
         if (!$product) {
-            return ApiFormatter::createApi(404, 'Produk tidak ditemukan');
+            return response()->json([
+                'error' => 'Produk tidak ditemukan'
+            ], 404);
         }
 
-        $harga_barang = $product->price * $qty;
-        $harga_ongkir = null;
+        $harga_barang = $product->harga_barang;
+        $harga_ongkir = null; // dari pihak shipping
         $harga_total = $harga_barang + $harga_ongkir;
 
-        $data = [
+        return response()->json([
             'id_produk' => $id_produk,
             'qty' => $qty,
             'id_customer' => $id_customer,
-            'harga_barang' => $harga_barang,
+            'harga_barang' => intval($harga_barang),
             'harga_ongkir' => $harga_ongkir,
             'harga_total' => $harga_total
-        ];
-
-        return ApiFormatter::createApi(200, 'Sukses', $data);
+        ]);
     }
 }
 
